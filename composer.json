@@ -1,0 +1,15 @@
+{
+    "name": "your-vendor/music-store",
+    "description": "Music Store Showcase Application",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.0",
+        "fakerphp/faker": "^1.23"
+    },
+    "autoload": {
+        "psr-4": {
+            "MusicStore\\": "src/"
+        }
+    }
+}
