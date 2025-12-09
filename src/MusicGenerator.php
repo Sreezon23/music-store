@@ -6,7 +6,7 @@ class MusicGenerator
     private SeededRandom $rng;
     private int $seed;
     private const SAMPLE_RATE = 44100;
-    private const DURATION = 6;
+    private const DURATION = 6; // 6 seconds
 
     public function __construct(int $seed)
     {
@@ -31,7 +31,6 @@ class MusicGenerator
         $currentTime = 0;
         $noteDuration = 0.3;
 
-
         for ($i = 0; $i < 30 && $currentTime < $sampleCount; $i++) {
             $noteSeed = $seed + $i;
             $noteIndex = $this->rng->randomInt($noteSeed, 0, count($scale) - 1);
@@ -40,7 +39,6 @@ class MusicGenerator
 
             for ($j = 0; $j < $noteSamples && $currentTime < $sampleCount; $j++) {
                 $t = ($currentTime++) / self::SAMPLE_RATE;
-
 
                 $envelope = 1.0;
                 $attackSamples = (int)(0.01 * self::SAMPLE_RATE);
@@ -77,6 +75,7 @@ class MusicGenerator
         $wav .= 'RIFF';
         $wav .= pack('V', 36 + $dataSize);
         $wav .= 'WAVE';
+
         $wav .= 'fmt ';
         $wav .= pack('V', 16);
         $wav .= pack('v', 1);
@@ -88,7 +87,7 @@ class MusicGenerator
 
         $wav .= 'data';
         $wav .= pack('V', $dataSize);
-r
+
         foreach ($samples as $sample) {
             $intSample = (int)($sample * 32767);
             $intSample = max(-32768, min(32767, $intSample));
