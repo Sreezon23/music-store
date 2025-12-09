@@ -6,7 +6,7 @@ class MusicGenerator
     private SeededRandom $rng;
     private int $seed;
     private const SAMPLE_RATE = 44100;
-    private const DURATION = 6; // 6 seconds
+    private const DURATION = 6;
 
     public function __construct(int $seed)
     {
@@ -14,10 +14,6 @@ class MusicGenerator
         $this->seed = $seed;
     }
 
-    /**
-     * Generate a simple WAV file for browser playback
-     * Returns base64-encoded WAV data as a data URI
-     */
     public function generateWaveData(int $songIndex): string
     {
         $baseSeed = $this->rng->seedForIndex($songIndex);
@@ -30,13 +26,12 @@ class MusicGenerator
         $samples = [];
         $sampleCount = self::SAMPLE_RATE * self::DURATION;
 
-        // Musical pentatonic scale (C major pentatonic) for pleasant sound
-        $scale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25]; // C D E G A C
+        $scale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
 
         $currentTime = 0;
-        $noteDuration = 0.3; // Duration per note in seconds
+        $noteDuration = 0.3;
 
-        // Generate a simple melody
+
         for ($i = 0; $i < 30 && $currentTime < $sampleCount; $i++) {
             $noteSeed = $seed + $i;
             $noteIndex = $this->rng->randomInt($noteSeed, 0, count($scale) - 1);
@@ -46,10 +41,10 @@ class MusicGenerator
             for ($j = 0; $j < $noteSamples && $currentTime < $sampleCount; $j++) {
                 $t = ($currentTime++) / self::SAMPLE_RATE;
 
-                // Apply envelope (attack-sustain-release)
+
                 $envelope = 1.0;
-                $attackSamples = (int)(0.01 * self::SAMPLE_RATE); // 10ms attack
-                $releaseSamples = (int)(0.1 * self::SAMPLE_RATE); // 100ms release
+                $attackSamples = (int)(0.01 * self::SAMPLE_RATE);
+                $releaseSamples = (int)(0.1 * self::SAMPLE_RATE);
 
                 if ($j < $attackSamples) {
                     $envelope = $j / max(1, $attackSamples);
@@ -57,13 +52,11 @@ class MusicGenerator
                     $envelope = ($noteSamples - $j) / max(1, $releaseSamples);
                 }
 
-                // Generate sine wave
                 $sample = sin(2 * M_PI * $frequency * $t) * 0.3 * $envelope;
                 $samples[] = $sample;
             }
         }
 
-        // Pad with silence if needed
         while (count($samples) < $sampleCount) {
             $samples[] = 0;
         }
@@ -81,29 +74,23 @@ class MusicGenerator
 
         $wav = '';
 
-        // RIFF header
         $wav .= 'RIFF';
         $wav .= pack('V', 36 + $dataSize);
         $wav .= 'WAVE';
-
-        // fmt sub-chunk
         $wav .= 'fmt ';
-        $wav .= pack('V', 16); // Subchunk1Size
-        $wav .= pack('v', 1); // AudioFormat (1 = PCM)
+        $wav .= pack('V', 16);
+        $wav .= pack('v', 1);
         $wav .= pack('v', $numChannels);
         $wav .= pack('V', self::SAMPLE_RATE);
         $wav .= pack('V', $byteRate);
         $wav .= pack('v', $blockAlign);
         $wav .= pack('v', $bitsPerSample);
 
-        // data sub-chunk
         $wav .= 'data';
         $wav .= pack('V', $dataSize);
-
-        // Audio samples - convert float to 16-bit integer
+r
         foreach ($samples as $sample) {
             $intSample = (int)($sample * 32767);
-            // Clamp to valid 16-bit range
             $intSample = max(-32768, min(32767, $intSample));
             $wav .= pack('s', $intSample);
         }

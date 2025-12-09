@@ -12,8 +12,6 @@ class SeededRandom
 
     public function seedForIndex(int $index): int
     {
-        // Combine seed with index using MAD (Multiply-Add-Divide)
-        // This ensures different indices produce different seeds
         $combined = abs((int)(($this->seed * 73856093) ^ ($index * 19349663)));
         return $combined % PHP_INT_MAX;
     }
