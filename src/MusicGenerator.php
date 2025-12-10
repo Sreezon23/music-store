@@ -6,7 +6,7 @@ class MusicGenerator
     private SeededRandom $rng;
     private int $seed;
     private const SAMPLE_RATE = 44100;
-    private const DURATION = 6; // 6 seconds
+    private const DURATION = 6;
 
     public function __construct(int $seed)
     {
