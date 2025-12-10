@@ -72,7 +72,6 @@ function handleGetAudio(): void
     $seed = isset($_GET['seed']) ? (int)$_GET['seed'] : 0;
     $songIndex = isset($_GET['index']) ? (int)$_GET['index'] : 1;
 
-    // Generate unique seed for this song's audio
     $rng = new SeededRandom($seed);
     $audioSeed = $rng->seedForIndex($songIndex);
 

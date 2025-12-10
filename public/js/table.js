@@ -21,7 +21,6 @@ class TableView {
             tbody.appendChild(row);
         });
 
-        // Update pagination
         const pageInfo = document.getElementById('pageInfo');
         pageInfo.textContent = `Page ${page}`;
 

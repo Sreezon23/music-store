@@ -22,7 +22,6 @@ class AppState {
     }
 
     setupEventListeners() {
-        // Toolbar events
         document.getElementById('locale').addEventListener('change', (e) => {
             this.setState({ locale: e.target.value, tablePage: 1, galleryPage: 1 });
             this.loadData();
@@ -45,7 +44,6 @@ class AppState {
             this.loadData();
         });
 
-        // View toggle
         document.getElementById('tableViewBtn').addEventListener('click', () => {
             this.switchView('table');
         });
@@ -54,7 +52,6 @@ class AppState {
             this.switchView('gallery');
         });
 
-        // Modal close
         document.querySelector('.close-btn').addEventListener('click', () => {
             this.closeModal();
         });
@@ -115,11 +112,9 @@ class AppState {
     switchView(view) {
         this.setState({ currentView: view });
 
-        // Update button styles
         document.getElementById('tableViewBtn').classList.toggle('active', view === 'table');
         document.getElementById('galleryViewBtn').classList.toggle('active', view === 'gallery');
 
-        // Update view visibility
         document.getElementById('tableView').classList.toggle('active', view === 'table');
         document.getElementById('galleryView').classList.toggle('active', view === 'gallery');
 
@@ -140,7 +135,6 @@ class AppState {
         document.getElementById('modalLikes').textContent = song.likes;
         document.getElementById('modalReview').textContent = song.review;
 
-        // Generate album cover with title and artist
         const cover = document.getElementById('albumCover');
         const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe'];
         const color = colors[song.index % colors.length];
@@ -149,7 +143,6 @@ class AppState {
 
         document.getElementById('expandedModal').classList.remove('hidden');
 
-        // Setup play button
         document.getElementById('playBtn').onclick = () => this.playAudio(song);
     }
 
@@ -190,5 +183,4 @@ class AppState {
     }
 }
 
-// Initialize app
 window.appState = new AppState();
